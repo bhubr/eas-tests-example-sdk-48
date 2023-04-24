@@ -52,4 +52,16 @@ RUN yarn
 RUN apt-get install -y git
 RUN git config --global --add safe.directory /opt/app
 
+# Install platform tools
+RUN curl https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip -o /tmp/platform-tools_r34.0.1-linux.zip
+RUN cd /opt/android/sdk && unzip /tmp/platform-tools_r34.0.1-linux.zip
+ENV PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
+
+RUN sdkmanager --install "cmake;3.22.1"
+RUN sdkmanager --install "emulator"
+RUN sdkmanager --install "ndk;23.1.7779620"
+RUN sdkmanager --install "patcher;v4"
+RUN sdkmanager --install "platform-tools"
+RUN sdkmanager --install "system-images;android-31;google_apis;x86_64"
+
 CMD eas build -p android -e test --local
