@@ -22,7 +22,11 @@ ANDROID_EMULATOR=pixel_4
 
 if [[ "$EAS_BUILD_PLATFORM" == "android" ]]; then
   # Start emulator
-  $ANDROID_SDK_ROOT/emulator/emulator @$ANDROID_EMULATOR -no-audio -no-boot-anim -no-window -use-system-libs 2>&1 >/dev/null &
+  if [[ "$USER" == "expo" ]]; then
+    $ANDROID_SDK_ROOT/emulator/emulator @$ANDROID_EMULATOR -no-audio -no-boot-anim -no-window -use-system-libs 2>&1 >/dev/null &
+  else
+    $ANDROID_SDK_ROOT/emulator/emulator @$ANDROID_EMULATOR -no-audio -no-boot-anim -no-window 2>&1 >/dev/null &
+  fi
 
   # Wait for emulator
   max_retry=10
