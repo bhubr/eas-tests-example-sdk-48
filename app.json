@@ -30,6 +30,11 @@
     },
     "plugins": [
       "@config-plugins/detox"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c3c04656-7ac0-464f-814c-2752c26613e6"
+      }
+    }
   }
 }
