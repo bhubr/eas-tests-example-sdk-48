@@ -50,5 +50,6 @@ RUN yarn
 # CMD find . -name "*.apk" && ls -l ./android/app/build/outputs/apk/debug/ && ls -l ./android/app/build/outputs/apk/androidTest/debug/
 
 RUN apt-get install -y git
+RUN git config --global --add safe.directory /opt/app
 
 CMD eas build -p android -e test --local
