@@ -15,17 +15,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.reactnativedevfr.eastestsexample"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.reactnativedevfr.eastestsexample"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["@config-plugins/detox"]
+    "plugins": [
+      "@config-plugins/detox"
+    ]
   }
 }
