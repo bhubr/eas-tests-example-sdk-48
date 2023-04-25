@@ -46,17 +46,23 @@ RUN apt-get update
 RUN apt-get install -y nodejs
 RUN npm i -g yarn eas-cli
 
+# Base variables for Android SDK
+# We keep (supposedly) deprecated ANDROID_HOME just in case...
+ENV ANDROID_SDK_ROOT="/opt/android/sdk"
+ENV ANDROID_HOME="/opt/android/sdk"
+
 # Install platform tools (especially adb)
 RUN curl https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip -o /tmp/platform-tools_r34.0.1-linux.zip
+RUN mkdir -p /opt/android/sdk
 RUN cd /opt/android/sdk && unzip /tmp/platform-tools_r34.0.1-linux.zip
 ENV PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
 
 # Install Android command-line tools (especially sdkmanager)
 RUN curl https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o /tmp/commandlinetools-linux-9477386_latest.zip
-RUN mkdir -p /opt/android/sdk/cmdline-tools
+RUN mkdir /opt/android/sdk/cmdline-tools
+# Final dir has to be /opt/android/sdk/cmdline-tools/latest
+# Lookup this SO answer https://stackoverflow.com/a/67413427/ ("How To" part)
 RUN cd /opt/android/sdk/cmdline-tools && unzip /tmp/commandlinetools-linux-9477386_latest.zip && mv cmdline-tools latest
-ENV ANDROID_SDK_ROOT="/opt/android/sdk"
-ENV ANDROID_HOME="/opt/android/sdk"
 ENV PATH="$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/emulator"
 
 # Agree to SDK manager & installed packages licenses

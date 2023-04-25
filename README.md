@@ -8,6 +8,8 @@ Build **base** Docker image:
 docker build -t eas-build-base -f Dockerfile.base .
 ```
 
+Build derived image containing your app
+
 ```
 docker build -t eas-tests-example .
 ```
