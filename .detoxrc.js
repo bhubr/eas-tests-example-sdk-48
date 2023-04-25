@@ -17,12 +17,25 @@ module.exports = {
     },
   },
   apps: {
+    'ios.debug': {
+      type: 'ios.app',
+      build:
+        'xcodebuild -workspace ios/eastestsexample.xcworkspace -scheme eastestsexample -configuration Debug -sdk iphonesimulator -arch x86_64 -derivedDataPath ios/build',
+      binaryPath:
+        'ios/build/Build/Products/Debug-iphonesimulator/eastestsexample.app',
+    },
     'ios.release': {
       type: 'ios.app',
       build:
         'xcodebuild -workspace ios/eastestsexample.xcworkspace -scheme eastestsexample -configuration Release -sdk iphonesimulator -arch x86_64 -derivedDataPath ios/build',
       binaryPath:
         'ios/build/Build/Products/Release-iphonesimulator/eastestsexample.app',
+    },
+    'android.debug': {
+      type: 'android.apk',
+      build:
+        'cd android && ./gradlew :app:assembleDebug :app:assembleAndroidTest -DtestBuildType=debug && cd ..',
+      binaryPath: 'android/app/build/outputs/apk/debug/app-debug.apk',
     },
     'android.release': {
       type: 'android.apk',
@@ -35,7 +48,7 @@ module.exports = {
     simulator: {
       type: 'ios.simulator',
       device: {
-        type: 'iPhone 12',
+        type: 'iPhone 14',
       },
     },
     emulator: {
@@ -46,9 +59,17 @@ module.exports = {
     },
   },
   configurations: {
+    'ios.debug': {
+      device: 'simulator',
+      app: 'ios.debug',
+    },
     'ios.release': {
       device: 'simulator',
       app: 'ios.release',
+    },
+    'android.debug': {
+      device: 'emulator',
+      app: 'android.debug',
     },
     'android.release': {
       device: 'emulator',

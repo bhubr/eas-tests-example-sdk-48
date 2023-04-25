@@ -19,14 +19,15 @@ set -eox pipefail
 trap cleanup EXIT
 
 ANDROID_EMULATOR=pixel_4
+if [[ "$USER" == "expo" ]]; then
+    ANDROID_EMULATOR_FLAGS="-no-audio -no-boot-anim -no-window -use-system-libs"
+  else
+    ANDROID_EMULATOR_FLAGS="-no-audio -no-boot-anim -no-window"
+fi
 
 if [[ "$EAS_BUILD_PLATFORM" == "android" ]]; then
   # Start emulator
-  if [[ "$USER" == "expo" ]]; then
-    $ANDROID_SDK_ROOT/emulator/emulator @$ANDROID_EMULATOR -no-audio -no-boot-anim -no-window -use-system-libs 2>&1 >/dev/null &
-  else
-    $ANDROID_SDK_ROOT/emulator/emulator @$ANDROID_EMULATOR -no-audio -no-boot-anim -no-window 2>&1 >/dev/null &
-  fi
+  $ANDROID_SDK_ROOT/emulator/emulator @$ANDROID_EMULATOR $ANDROID_EMULATOR_FLAGS 2>&1 >/dev/null &
 
   # Wait for emulator
   max_retry=10
@@ -37,13 +38,20 @@ if [[ "$EAS_BUILD_PLATFORM" == "android" ]]; then
     counter=$((counter + 1))
   done
 
+
   # Execute Android tests
   if [[ "$EAS_BUILD_PROFILE" == "test" ]]; then
     detox test --configuration android.release
+  fi
+  if [[ "$EAS_BUILD_PROFILE" == "test_debug" ]]; then
+    detox test --configuration android.debug
   fi
 else
   # Execute iOS tests
   if [[  "$EAS_BUILD_PROFILE" == "test" ]]; then
     detox test --configuration ios.release
+  fi
+  if [[ "$EAS_BUILD_PROFILE" == "test_debug" ]]; then
+    detox test --configuration ios.debug
   fi
 fi

@@ -1,10 +1,8 @@
-describe('Home screen', () => {
-  beforeAll(async () => {
-    await device.launchApp();
-  });
+const { openApp } = require('./utils/openApp');
 
+describe('Home screen', () => {
   beforeEach(async () => {
-    await device.reloadReactNative();
+    await openApp();
   });
 
   it('"Click me" button should be visible', async () => {

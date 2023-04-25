@@ -36,6 +36,20 @@
         "simulator": true
       },
       "channel": "test"
+    },
+    "test_debug": {
+      "android": {
+        "gradleCommand": ":app:assembleDebug :app:assembleAndroidTest -DtestBuildType=debug",
+        "withoutCredentials": true
+      },
+      "ios": {
+        "buildConfiguration": "Debug",
+        "simulator": true
+      },
+      "env": {
+        "EXPO_USE_UPDATES": "1"
+      },
+      "channel": "test_debug"
     }
   },
   "submit": {
