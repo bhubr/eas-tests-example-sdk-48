@@ -1,0 +1,81 @@
+# Dockerfile for testing Expo-managed React Native apps with Detox
+# Build with docker build -t eas-build-base -f Dockerfile.base .
+FROM ubuntu:22.04
+
+WORKDIR /opt/app
+
+# Base dependencies
+RUN apt-get update
+# Notes:
+# watchman is not needed for a release build
+# but we keep it in case we find a way to run
+# Detox tests against a dev client build
+RUN apt-get install --yes \
+  curl \
+  watchman \
+  openjdk-11-jdk \
+  unzip \
+  make \
+  git \
+  # from https://docs.expo.dev/build-reference/e2e-tests/#5-configure-eas-build
+  # installed from eas-hooks/eas-build-pre-install.sh script
+  libc6 \
+  libdbus-1-3 \
+  libfontconfig1 \
+  libgcc1 \
+  libpulse0 \
+  libtinfo5 \
+  libx11-6 \
+  libxcb1 \
+  libxdamage1 \
+  libnss3 \
+  libxcomposite1 \
+  libxcursor1 \
+  libxi6 \
+  libxext6 \
+  libxfixes3 \
+  zlib1g \
+  libgl1 \
+  pulseaudio \
+  socat
+
+# Install Node.js from Nodesource packages
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh
+RUN bash /tmp/nodesource_setup.sh
+RUN apt-get update
+RUN apt-get install -y nodejs
+RUN npm i -g yarn eas-cli
+
+# Install platform tools (especially adb)
+RUN curl https://dl.google.com/android/repository/platform-tools_r34.0.1-linux.zip -o /tmp/platform-tools_r34.0.1-linux.zip
+RUN cd /opt/android/sdk && unzip /tmp/platform-tools_r34.0.1-linux.zip
+ENV PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
+
+# Install Android command-line tools (especially sdkmanager)
+RUN curl https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o /tmp/commandlinetools-linux-9477386_latest.zip
+RUN mkdir -p /opt/android/sdk/cmdline-tools
+RUN cd /opt/android/sdk/cmdline-tools && unzip /tmp/commandlinetools-linux-9477386_latest.zip && mv cmdline-tools latest
+ENV ANDROID_SDK_ROOT="/opt/android/sdk"
+ENV ANDROID_HOME="/opt/android/sdk"
+ENV PATH="$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/emulator"
+
+# Agree to SDK manager & installed packages licenses
+RUN yes | sdkmanager --licenses
+# Download Android 31 x86_64 system image
+RUN sdkmanager --install "system-images;android-31;google_apis;x86_64"
+# Create `pixel_4` device from sys image
+RUN echo no | avdmanager --verbose create avd --name "pixel_4" --device "pixel_4" --package "system-images;android-31;google_apis;x86_64"
+
+# Install additional Android SDK dependencies that would otherwise be installed during build process
+RUN sdkmanager --install "cmake;3.22.1"
+RUN sdkmanager --install "emulator"
+RUN sdkmanager --install "ndk;23.1.7779620"
+RUN sdkmanager --install "patcher;v4"
+RUN sdkmanager --install "platform-tools"
+
+# Allow /opt/app mapping with original repository
+# (might be removed in favor of cloning the repo just before build)
+RUN git config --global --add safe.directory /opt/app
+
+# Dummy command
+CMD node -v

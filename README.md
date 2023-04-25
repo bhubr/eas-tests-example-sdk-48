@@ -2,7 +2,11 @@
 
 Based on <https://docs.expo.dev/build-reference/e2e-tests/>.
 
-Build Docker image:
+Build **base** Docker image:
+
+```
+docker build -t eas-build-base -f Dockerfile.base .
+```
 
 ```
 docker build -t eas-tests-example .
