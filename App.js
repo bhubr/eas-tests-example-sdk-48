@@ -16,7 +16,7 @@ export default function App() {
           <Text style={styles.text}>Click me</Text>
         </Pressable>
       )}
-      {clicked && <Text style={styles.hi}>Hi!</Text>}
+      {clicked && <Text style={styles.hi}>Hello World!</Text>}
       <StatusBar style="auto" />
     </View>
   );

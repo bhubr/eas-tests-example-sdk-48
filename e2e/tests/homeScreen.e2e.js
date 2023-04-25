@@ -9,8 +9,8 @@ describe('Home screen', () => {
     await expect(element(by.id('click-me-button'))).toBeVisible();
   });
 
-  it('shows "Hi!" after tapping "Click me"', async () => {
+  it('shows "Hello World!" after tapping "Click me"', async () => {
     await element(by.id('click-me-button')).tap();
-    await expect(element(by.text('Hi!'))).toBeVisible();
+    await expect(element(by.text('Hello World!'))).toBeVisible();
   });
 });
