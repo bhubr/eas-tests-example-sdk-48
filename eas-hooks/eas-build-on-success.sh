@@ -9,7 +9,7 @@ function cleanup()
   fi
 }
 
-if [[ "$EAS_BUILD_PROFILE" != "test" ]]; then
+if [[ "$EAS_BUILD_PROFILE" != "test"* ]]; then
   exit
 fi
 
