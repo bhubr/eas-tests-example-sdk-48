@@ -13,4 +13,9 @@ describe('Home screen', () => {
     await element(by.id('click-me-button')).tap();
     await expect(element(by.text('Hello World!'))).toBeVisible();
   });
+
+  it('shows "accusamus beatae..." below photo after tapping "Click me"', async () => {
+    await element(by.id('click-me-button')).tap();
+    await expect(element(by.text('accusamus beatae ad facilis cum similique qui sunt'))).toBeVisible();
+  });
 });

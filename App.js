@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import PhotosListAPI from './PhotosListAPI';
 
 export default function App() {
   const [clicked, setClicked] = useState(false);
@@ -16,7 +17,12 @@ export default function App() {
           <Text style={styles.text}>Click me</Text>
         </Pressable>
       )}
-      {clicked && <Text style={styles.hi}>Hello World!</Text>}
+      {clicked && (
+        <View>
+          <Text style={styles.hi}>Hello World!</Text>
+          <PhotosListAPI />
+        </View>
+      )}
       <StatusBar style="auto" />
     </View>
   );
